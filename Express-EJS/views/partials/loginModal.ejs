@@ -1,0 +1,143 @@
+<!-- Login Modal -->
+<div
+  id="login-modal"
+  style="
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.6);
+    z-index: 9999;
+    align-items: center;
+    justify-content: center;
+  "
+>
+  <div
+    style="
+      background: #1e293b;
+      border: 1px solid #334155;
+      border-radius: 12px;
+      padding: 32px;
+      max-width: 400px;
+      width: 90%;
+    "
+  >
+    <div
+      style="
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+      "
+    >
+      <h2 style="margin: 0; color: #fff">Login / Sign Up</h2>
+      <button
+        id="close-modal-btn"
+        style="
+          background: transparent;
+          border: none;
+          font-size: 24px;
+          color: #cbd5e1;
+          cursor: pointer;
+        "
+      >
+        &times;
+      </button>
+    </div>
+
+    <form id="modal-login-form">
+      <input
+        type="email"
+        id="modal-email"
+        placeholder="Email"
+        required
+        style="
+          width: 100%;
+          padding: 12px;
+          margin-bottom: 12px;
+          border-radius: 8px;
+          border: 1px solid #334155;
+          background: #0f172a;
+          color: #fff;
+        "
+      />
+      <input
+        type="password"
+        id="modal-password"
+        placeholder="Password"
+        required
+        style="
+          width: 100%;
+          padding: 12px;
+          margin-bottom: 12px;
+          border-radius: 8px;
+          border: 1px solid #334155;
+          background: #0f172a;
+          color: #fff;
+        "
+      />
+      <p
+        id="modal-error"
+        style="color: #f87171; font-size: 14px; margin: 8px 0; display: none"
+      ></p>
+      <button type="submit" class="btn btn-primary" style="width: 100%">
+        Login
+      </button>
+    </form>
+
+    <p style="text-align: center; margin-top: 16px; color: #cbd5e1">
+      New user?
+      <a href="/signup" style="color: #22d3ee; text-decoration: none"
+        >Sign up here</a
+      >
+    </p>
+  </div>
+</div>
+
+<script>
+  const loginModal = document.getElementById("login-modal");
+  const closeModalBtn = document.getElementById("close-modal-btn");
+  const modalLoginForm = document.getElementById("modal-login-form");
+  const modalErrorMsg = document.getElementById("modal-error");
+
+  closeModalBtn.addEventListener("click", () => {
+    loginModal.style.display = "none";
+  });
+
+  loginModal.addEventListener("click", (e) => {
+    if (e.target === loginModal) {
+      loginModal.style.display = "none";
+    }
+  });
+
+  modalLoginForm.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const email = document.getElementById("modal-email").value;
+    const password = document.getElementById("modal-password").value;
+
+    try {
+      const res = await fetch("/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, password }),
+      });
+
+      if (res.ok) {
+        window.location.reload();
+      } else {
+        const data = await res.json();
+        modalErrorMsg.textContent = data.error || "Login failed";
+        modalErrorMsg.style.display = "block";
+      }
+    } catch (error) {
+      modalErrorMsg.textContent = "Something went wrong";
+      modalErrorMsg.style.display = "block";
+    }
+  });
+
+  window.openLoginModal = function () {
+    loginModal.style.display = "flex";
+  };
+</script>
