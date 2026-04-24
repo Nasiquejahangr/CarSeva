@@ -1,9 +1,11 @@
 {
-  "name": "${PROJECT_NAME}",
+  "name": "cgc-react-workspace",
   "version": "1.0.0",
-  "description": "",
+  "description": "Workspace root for the CarSeva Express app",
   "main": "index.js",
   "scripts": {
+    "start": "node index.js",
+    "postinstall": "npm install --prefix Express-EJS",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "private": true
